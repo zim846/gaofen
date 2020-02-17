@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+﻿# -*- coding: utf-8 -*-
 import cv2
 import numpy as np
 import os
@@ -70,8 +70,8 @@ def cal_bow(image_paths, numWords):
     for image_path, descriptor in des_list[1:]:
         # vstack对矩阵进行拼接，将所有的特征word拼接到一起
         # print descriptor.shape, descriptors.shape
-        # if descriptor != None:
-        descriptors = np.vstack((descriptors, descriptor))
+        if descriptor is not None:
+            descriptors = np.vstack((descriptors, descriptor))
 
     # 对特征词使用k-menas算法进行聚类
     print("Start k-means: %d words, %d key points" % (numWords, descriptors.shape[0]))
@@ -86,9 +86,10 @@ def cal_bow(image_paths, numWords):
         # if descriptor != None:
         # 根据聚类中心将所有数据进行分类des_list[i][1]为数据, voc则是kmeans产生的聚类中心.
         # vq输出有两个:一是各个数据属于哪一类的label,二是distortion
-        words, distance = vq(des_list[i][1], voc)
-        for w in words:
-            im_features[i][w] += 1
+        if descriptor is not None:
+            words, distance = vq(des_list[i][1], voc)
+            for w in words:
+                im_features[i][w] += 1
 
     # Perform Tf-Idf vectorization
     nbr_occurences = np.sum((im_features > 0) * 1, axis=0)
@@ -118,7 +119,7 @@ def evaluate(actual, pred):
 '''
 '''
 # # 提取图片特征并保存 图像大小为20*20
-path = r'I:\nirscene1\test_3'
+path = r'E:\data_set\test'
 img_pathes, labels = load_data(path)
 im_features = cal_bow(img_pathes, numWords=500)
 joblib.dump((im_features, labels), "bof.pkl8", compress=3)
