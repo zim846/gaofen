@@ -118,7 +118,7 @@ def evaluate(actual, pred):
 '''
 '''
 # # 提取图片特征并保存 图像大小为20*20
-path = r'I:\nirscene1\test_3'
+path = r'I:\cfimage\rgb'
 img_pathes, labels = load_data(path)
 im_features = cal_bow(img_pathes, numWords=500)
 joblib.dump((im_features, labels), "bof.pkl8", compress=3)
